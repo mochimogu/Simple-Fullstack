@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Insert User Here</h1>
+    <form id="form">
+        <div>
+            <label for="username">USERNAME</label>
+            <input type="text" name="username" id="user">
+        </div>
+        <div>
+            <label for="password">PASSWORD</label>
+            <input type="text" name="password" id="pass">
+        </div>
+        <div>
+            <label for="password">DESCRIPTION</label>
+            <input type="text" name="description" id="desc">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('user').value;
+            const password = document.getElementById('pass').value;
+            const description = document.getElementById('desc').value;
+            console.log(name, password, description);
+
+            await fetch('/api/v1/users/insertUser', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username : name,
+                    password : password,
+                    desc : description
+                })
+            })
+
+        })
+    </script>
+</body>
+</html>
