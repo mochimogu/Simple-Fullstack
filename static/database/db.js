@@ -67,8 +67,7 @@ async function getAllUsers() {
     }
 }
 
-async function UpdateAUser(data) {
-
+async function UpdateAUser(id, data) {
     try {
         const client = await database.connect();
         const query = `
@@ -79,24 +78,48 @@ async function UpdateAUser(data) {
                 LAST_MODIFIED = CURRENT_TIMESTAMP
             WHERE ID = $4
         `
-        const value = []
+        const value = [data.username, data.password, data.desc, id]
         const results = await client.query(query, value)
-
+        
         if (results.rowCount === 0) {
             await client.release();
             return -1
         }
-
         await client.release()
         return 0        
-
     } catch (error) {
         console.log(error)
         return -1;
     }
+}
 
-
+async function DeleteAUser(id) {
+    try {
+        const client = await database.connect();
+        const query = `
+            DELETE FROM USERS
+            WHERE ID = $1
+            RETURNING *
+        `
+        const value = [id]
+        const results = await client.query(query, value)
+        console.log(results);
+        if (results.rowCount === 0) {
+            await client.release();
+            return -1
+        }
+        await client.release()
+        return 0        
+    } catch (error) {
+        console.log(error)
+        return -1   
+    }
 }
 
 
-module.exports = { insertUser, getAllUsers }
+module.exports = { 
+    insertUser, 
+    getAllUsers, 
+    UpdateAUser,
+    DeleteAUser,
+}

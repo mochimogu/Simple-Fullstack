@@ -26,4 +26,32 @@ routes.post('/insertUser', async (req, res) => {
 })
 
 
+routes.put('/updateUser/:id', async (req, res) => {
+    try {
+        const results = await db.UpdateAUser(req.params.id, req.body)
+        if(results === 0) {
+            return res.sendStatus(200).json({results : "success"})
+        } else {
+            return res.sendStatus(400).json({results : "failure"})
+        }     
+    } catch (error) {
+        console.log(error)
+        return -1   
+    }
+})
+
+routes.delete('/deleteUser/:id', async (req, res) => {
+    try {
+        const results = await db.DeleteAUser(req.params.id)
+        if(results === 0) {
+            return res.sendStatus(200)
+        } else {
+            return res.sendStatus(400)
+        }     
+    } catch (error) {
+        console.log(error)
+        return -1   
+    }
+})
+
 module.exports = routes
